@@ -1,29 +1,27 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
-require('dotenv').config(); // para leer las variables de entorno
+const mongose = require('mongoose');
+require("dotenv").config(); // para leer las variables de entorno
+const userRoutes = require('./routes/user');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 9000;
 
-// Crear una instancia de mongoDbclient     
-let client;
-
-async function connectToMongoDB() {
-    try {
-        client = new MongoClient(process.env.MONGODB_URI);
-        await client.connect();
-        console.log('Conectado a MongoDB Atlas');
-    } catch (error) {
-        console.error('ERROR AL CONECTAR', error);
-    }
-}
-
-// Conectar a MongoDB
-connectToMongoDB();
 
 // Rutas
-app.get('/', (req, res) => {
-    res.send('Hello World hola ');
+app.get("/", (req, res) => {
+    res.send("Hello World holaa "); 
 });
+
+//middleware
+
+app.use('/api', userRoutes);
+
+
+// Conectar a MongoDB
+mongose
+    .connect(process.env.MONGO_URI)
+    .then(() => console.log('Conectado a MongoDB'))
+    .catch((err) => console.log('ERROR',err));
+
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
