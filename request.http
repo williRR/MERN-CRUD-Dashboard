@@ -1,12 +1,15 @@
 ###
-POST http://127.0.0.1:9000/api/user HTTP/1.1
+POST http://127.0.0.1:9000/api/producto HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "John tesla ",
-  "age": 56,
-  "email": "patasa@gmail.com"
-  } 
+  "nombre": "Laptop ",
+  "descripcion": "Laptop l i7",
+  "precio": 120,
+  "categoria": "Electrónica",
+  "cantidadEnStock": 15
+}
+
 
 ###
 GET http://127.0.0.1:9000/api/user HTTP/1.1

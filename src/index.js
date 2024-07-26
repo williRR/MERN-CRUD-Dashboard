@@ -2,8 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose'); // Importa el paquete de mongoose
 require('dotenv').config(); // Para leer las variables de entorno
 
-const userRoutes = require('./routes/user'); // Asegúrate de que esta ruta exista y sea correcta
-
+const userRoutes = require('./routes/producto'); 
 const app = express();
 const port = process.env.PORT || 9000;
 
@@ -13,7 +12,7 @@ app.use('/api', userRoutes);
 
 // Rutas
 app.get("/", (req, res) => {
-    res.send("Hello World holaa");
+    res.send("Hello World ");
 });
 
 // Conectar a MongoDB
@@ -22,4 +21,4 @@ mongoose
     .then(() => console.log('Conectado a MongoDB'))
     .catch((err) => console.error('Error conectando a MongoDB:', err));
 
-app.listen(port, () => console.log(`Server is running on port ${port}`));
+app.listen(port, () => console.log(`servidor corriendo en el puerto ${port}`));

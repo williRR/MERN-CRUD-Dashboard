@@ -1,10 +1,10 @@
 const express = require("express" );
 // modelo de datos de usuario 
-const userSchema= require("../models/user");
+const userSchema= require("../models/producto");
 const router = express.Router();
 
 // creando usuario , end point 
-router.post("/user", (req, res) => {
+router.post("/producto", (req, res) => {
     const user = userSchema(req.body);
     user
         .save()
@@ -17,7 +17,7 @@ router.post("/user", (req, res) => {
 
 // mostar todos los usuarios
 
-router.get("/user", (req, res) => {
+router.get("/producto", (req, res) => {
     userSchema
         .find()
         .then((data)=> res.json(data))
@@ -27,7 +27,7 @@ router.get("/user", (req, res) => {
 // mostrar un usuario en especifico
 
 
-router.get("/user/:id", (req, res) => {
+router.get("/producto/:id", (req, res) => {
     const{id}= req.params
     userSchema
         .findById(id)
@@ -37,7 +37,7 @@ router.get("/user/:id", (req, res) => {
 
 
 // actualizar un usuario en especifico
-router.put("/user/:id", (req, res) => {
+router.put("/producto/:id", (req, res) => {
     const{id}= req.params;
     const{name,age,email}= req.body;
     userSchema
@@ -50,7 +50,7 @@ router.put("/user/:id", (req, res) => {
 
 // eliminar un usuario en especifico
 
-router.delete("/user/:id", (req, res) => {
+router.delete("/producto/:id", (req, res) => {
     const{id}= req.params;
     userSchema
         .deleteOne({_id:id})        
