@@ -3,7 +3,28 @@ POST http://127.0.0.1:9000/api/user HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "age": 29,
-  "email": "hola@gmail.com"
+  "name": "John tesla ",
+  "age": 56,
+  "email": "patasa@gmail.com"
   } 
+
+###
+GET http://127.0.0.1:9000/api/user HTTP/1.1
+
+
+###
+GET http://127.0.0.1:9000/api/user/66a305c329f3d5e88a7b347f HTTP/1.1
+
+
+###
+PUT  http://127.0.0.1:9000/api/user/66a305c329f3d5e88a7b347f HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Willian roquel ",
+  "age": 60,
+  "email": "goku@gmail.com"
+  } 
+
+###
+DELETE  http://127.0.0.1:9000/api/user/66a2fdd320ec03a2ae617611 HTTP/1.1
