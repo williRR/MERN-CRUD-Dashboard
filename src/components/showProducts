@@ -1,0 +1,45 @@
+// crando componente con funciones exporbles 
+// usando la extension ES7+ React/Redux/React-Native snippet
+// escribiendo  rafce
+// para crear un componente funcional
+
+import React,{useEffect,useState} from 'react'
+// useState se usa para asignar un valor a nuestras variables
+// useEffect se usa para cuando se renderiza la paguina
+import axios from 'axios'
+// axios se usa para hacer peticiones a la api
+import Swal from 'sweetalert2'
+// sweetalert2 se usa para mostrar alertas en la paguina
+import withreactContent from 'sweetalert2-react-content'
+// withreactContent se usa para mostrar alertas en la paguina
+
+import { show_alert } from '../functions'
+// funcion alojada en functions.js
+
+
+const showProducts = () => {
+
+    const url = 'http://127.0.0.1:9000/productos'
+    const [productos, setProductos] = useState([]);
+    const [id, setId] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [descripcion, setDescripcion] = useState('');
+    const [precio, setPrecio] = useState(0);
+    const [categoria, setCategoria] = useState('');
+    const [cantidadEnStock, setCantidadEnStock] = useState(1);
+
+    useEffect(() => {
+        getProducts();
+    }, []);
+
+    const getProducts = async () => {
+        const respueta = await axios.get(url);
+        setProductos(respueta.data);
+    }
+
+  return (
+    <div>showProducts</div>
+  )
+}
+
+export default showProducts
