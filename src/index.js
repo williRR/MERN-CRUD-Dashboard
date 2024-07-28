@@ -1,24 +1,17 @@
-const express = require('express');
-const mongoose = require('mongoose'); // Importa el paquete de mongoose
-require('dotenv').config(); // Para leer las variables de entorno
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 
-const userRoutes = require('./routes/producto'); 
-const app = express();
-const port = process.env.PORT || 9000;
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 
-// Middleware
-app.use(express.json());
-app.use('/api', userRoutes);
-
-// Rutas
-app.get("/", (req, res) => {
-    res.send("Hello World ");
-});
-
-// Conectar a MongoDB
-mongoose
-    .connect(process.env.MONGODB_URI)
-    .then(() => console.log('Conectado a MongoDB'))
-    .catch((err) => console.error('Error conectando a MongoDB:', err));
-
-app.listen(port, () => console.log(`servidor corriendo en el puerto ${port}`));
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
