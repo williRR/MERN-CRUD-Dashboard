@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import ShowProducts from './components/ShowProducts'; // Asegúrate de que la ruta sea correcta
+import ShowProducts from './components/ShowProducts'; // importando el componente ShowProducts
 
 function App() {
   return (
