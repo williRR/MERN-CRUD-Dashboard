@@ -1,16 +1,24 @@
-// Code for the App component goes here
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import logo from './logo.svg';
+import './App.css';
 
 function App() {
   return (
-
-    // creando rutas , en este caso solo ruta /
-    <BrowserRouter>
-      <Routes>
-        {/* el elemento que se tiene aqui es el componente  */}
-        <Route path="/" element={} />
-      </Routes> 
-    </BrowserRouter>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
   );
 }
 
