@@ -38,7 +38,18 @@ const showProducts = () => {
     }
 
   return (
-    <div>showProducts</div>
+    <div  className='App'>
+        <div className='container-fluid'>
+
+
+        </div>
+        <div className='modal fade'>
+
+            
+        </div>
+
+
+    </div>
   )
 }
 
