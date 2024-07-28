@@ -6,7 +6,7 @@ const router = express.Router();
 // creando usuario , end point 
 router.post("/producto", (req, res) => {
     const user = userSchema(req.body);
-    user
+    user 
         .save()
         .then((data)=> res.json(data))
         .catch((error) => res.json({message: error}));
