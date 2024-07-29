@@ -1,63 +1,50 @@
-const express = require("express" );
-// modelo de datos de usuario 
-const userSchema= require("../models/producto");
+const express = require("express");
+const productoSchema = require("../models/producto");
 const router = express.Router();
 
-// creando usuario , end point 
+// Crear producto
 router.post("/producto", (req, res) => {
-    const user = userSchema(req.body);
-    user
+    const producto = productoSchema(req.body);
+    producto
         .save()
-        .then((data)=> res.json(data))
-        .catch((error) => res.json({message: error}));
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
 });
 
-
-
-
-// mostar todos los usuarios
-
+// Mostrar todos los productos
 router.get("/producto", (req, res) => {
-    userSchema
+    productoSchema
         .find()
-        .then((data)=> res.json(data))
-        .catch((error) => res.json({message: error}));
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
 });
 
-// mostrar un usuario en especifico
-
-
+// Mostrar un producto específico
 router.get("/producto/:id", (req, res) => {
-    const{id}= req.params
-    userSchema
+    const { id } = req.params;
+    productoSchema
         .findById(id)
-        .then((data)=> res.json(data))
-        .catch((error) => res.json({message: error}));
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
 });
 
-
-// actualizar un usuario en especifico
+// Actualizar un producto específico
 router.put("/producto/:id", (req, res) => {
-    const{id}= req.params;
-    const{name,age,email}= req.body;
-    userSchema
-        .updateOne({_id:id},{  $set: {name,age,email}})
-        .then((data)=> res.json(data))
-        .catch((error) => res.json({message: error}));
+    const { id } = req.params;
+    const { nombre, descripcion, precio, categoria, cantidadEnStock } = req.body;
+    productoSchema
+        .updateOne({ _id: id }, { $set: { nombre, descripcion, precio, categoria, cantidadEnStock } })
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
 });
 
-
-
-// eliminar un usuario en especifico
-
+// Eliminar un producto específico
 router.delete("/producto/:id", (req, res) => {
-    const{id}= req.params;
-    userSchema
-        .deleteOne({_id:id})        
-        .then((data)=> res.json(data))
-        .catch((error) => res.json({message: error}));
+    const { id } = req.params;
+    productoSchema
+        .deleteOne({ _id: id })
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }));
 });
-
-
 
 module.exports = router;

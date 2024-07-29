@@ -1,12 +1,14 @@
 const express = require('express');
-const mongoose = require('mongoose'); // Importa el paquete de mongoose
-require('dotenv').config(); // Para leer las variables de entorno
+const mongoose = require('mongoose');
+const cors = require('cors'); // Importa el paquete cors
+require('dotenv').config();
 
 const userRoutes = require('./routes/producto'); 
 const app = express();
 const port = process.env.PORT || 9000;
 
 // Middleware
+app.use(cors()); // Habilita CORS
 app.use(express.json());
 app.use('/api', userRoutes);
 
@@ -21,4 +23,4 @@ mongoose
     .then(() => console.log('Conectado a MongoDB'))
     .catch((err) => console.error('Error conectando a MongoDB:', err));
 
-app.listen(port, () => console.log(`servidor corriendo en el puerto ${port}`));
+app.listen(port, () => console.log(`Servidor corriendo en el puerto ${port}`));

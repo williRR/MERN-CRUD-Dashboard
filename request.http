@@ -20,14 +20,16 @@ GET http://127.0.0.1:9000/api/producto/66a40026154b398e12da0bc9 HTTP/1.1
 
 
 ###
-PUT  http://127.0.0.1:9000/api/producto/66a40026154b398e12da0bc9 HTTP/1.1
+PUT  http://127.0.0.1:9000/api/producto/666a6d96175fe8095fefdcd09 HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Willian roquel ",
-  "age": 60,
-  "email": "goku@gmail.com"
-  } 
+  "nombre": "pc gamer ",
+  "descripcion": "Laptop l i7",
+  "precio": 10,
+  "categoria": "Electrónica",
+  "cantidadEnStock": 10
+} 
 
 ###
 DELETE  http://127.0.0.1:9000/api/producto/66a40026154b398e12da0bc9 HTTP/1.1
