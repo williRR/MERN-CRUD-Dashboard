@@ -177,20 +177,23 @@ const show_alert = (mensaje, tipo) => {
     };
     
 
-    // Datos para la gráfica circular
-    const pieData = {
-        labels: productos.map((producto) => producto.producto),
-        datasets: [
-            {
-                label: 'Cantidad en Stock',
-                data: productos.map((producto) => producto.cantidadEnStock),
-                backgroundColor: productos.map(
-                    () => `#${Math.floor(Math.random() * 16777215).toString(16)}`
-                ),
-                hoverOffset: 4,
-            },
-        ],
-    };
+// Datos para la gráfica circular
+const totalProductos = productos.reduce((total, producto) => total + producto.cantidadEnStock, 0);
+
+const pieData = {
+    labels: productos.map((producto) => producto.producto),
+    datasets: [
+        {
+            label: 'Cantidad en Stock',
+            data: productos.map((producto) => ((producto.cantidadEnStock / totalProductos) * 100).toFixed(1)),
+            backgroundColor: productos.map(
+                () => `#${Math.floor(Math.random() * 16777215).toString(16)}`
+            ),
+            hoverOffset: 4,
+        },
+    ],
+};
+
 
     return (
         <div className='App'>
