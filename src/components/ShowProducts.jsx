@@ -29,9 +29,24 @@ const ShowProducts = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+         // Función para obtener los productos desde la API
+         const getProducts = async () => {
+            try {
+                setLoading(true);
+                const respuesta = await axios.get(url);
+                setProductos(respuesta.data);
+                setLoading(false);
+            } catch (err) {
+                setError(err);
+                setLoading(false);
+            }
+        };
+   
+
     useEffect(() => {
         getProducts();
     }, []);
+
 
     // Determina la operación que se va a realizar
     const openModal = (op, _id, producto, descripcion, precio, cantidad) => {
@@ -60,80 +75,84 @@ const ShowProducts = () => {
         }, 500);
     };
 
-    // Valida que todos los campos estén llenos
-    const validateFields = () => {
-        let parametros;
-        let metodo;
-        let id = document.getElementById('id').value; // Obtén el ID del campo oculto
 
-        if (producto.trim() === '') {
-            show_alert('El campo producto es requerido', 'error');
-        } else if (descripcion.trim() === '') {
-            show_alert('El campo descripcion es requerido', 'error');
-        } else if (precio.toString().trim() === '') { // Convertir precio a string
-            show_alert('El campo precio es requerido', 'error');
-        } else if (cantidad.toString().trim() === '') { // Convertir cantidad a string
-            show_alert('El campo cantidad es requerido', 'error');
-        } else {
-            parametros = { 
-                producto: producto.trim(), 
-                descripcion: descripcion.trim(), 
-                precio: parseFloat(precio.toString().trim()), 
-                cantidadEnStock: parseInt(cantidad.toString().trim()) 
-            };
 
-            if (operation === 1) {
-                metodo = 'POST';
-            } else if (operation === 2) {
-                metodo = 'PUT';
+        // Función para enviar datos a la API
+        const enviarDatos = async (parametros, metodo, id = '') => {
+            try {
+                const urlConId = id ? `${url}/${id}` : url;
+                const respuesta = await axios({ method: metodo, url: urlConId, data: parametros });
+                let tipo = respuesta.data.success ? 'success' : 'error';
+                let mensaje = respuesta.data.message;
+                show_alert(mensaje, tipo);
+                if (tipo === 'success') {
+                    document.getElementById('btnCerrar').click();
+                    // Actualiza los productos en el estado
+                    await getProducts(); // Refresca la lista de productos
+                }
+            } catch (error) {
+                show_alert('Error en la solicitud', 'error');
             }
-            enviarDatos(parametros, metodo, id); // Pasar el ID en la llamada
-        }
-    };
-
-    // Función para enviar datos a la API
-    const enviarDatos = async (parametros, metodo, id = '') => {
-        try {
-            // Añadir ID a la URL para PUT y DELETE
-            const urlConId = id ? `${url}/${id}` : url;
-            const respuesta = await axios({ method: metodo, url: urlConId, data: parametros });
-            let tipo = respuesta.data.success ? 'success' : 'error';
-            let mensaje = respuesta.data.message;
-            show_alert(mensaje, tipo);
-            if (tipo === 'success') {
-                document.getElementById('btnCerrar').click();
-                await getProducts(); // Asegúrate de esperar a que se actualicen los productos
+        };
+    
+        
+        const validateFields = async () => {
+            let parametros;
+            let metodo;
+            let id = document.getElementById('id').value; // Obtén el ID del campo oculto
+        
+            if (producto.trim() === '') {
+                show_alert('El campo producto es requerido', 'error');
+            } else if (descripcion.trim() === '') {
+                show_alert('El campo descripcion es requerido', 'error');
+            } else if (precio.toString().trim() === '') { // Convertir precio a string
+                show_alert('El campo precio es requerido', 'error');
+            } else if (cantidad.toString().trim() === '') { // Convertir cantidad a string
+                show_alert('El campo cantidad es requerido', 'error');
+            } else {
+                parametros = { 
+                    producto: producto.trim(), 
+                    descripcion: descripcion.trim(), 
+                    precio: parseFloat(precio.toString().trim()), 
+                    cantidadEnStock: parseInt(cantidad.toString().trim()) 
+                };
+        
+                if (operation === 1) {
+                    metodo = 'POST';
+                } else if (operation === 2) {
+                    metodo = 'PUT';
+                }
+        
+                try {
+                    await enviarDatos(parametros, metodo, id); // Espera a que la solicitud se complete
+                    // Mueve el mensaje de exito aquí, después de que se haya completado la solicitud
+                    if (operation === 1) {
+                        show_alert('Producto agregado correctamente', 'success');
+                    } else if (operation === 2) {
+                        show_alert('Producto editado correctamente', 'success');
+                    }
+                } catch (error) {
+                    // Muestra un mensaje de error si la solicitud falla
+                    show_alert('Error al guardar el producto', 'error');
+                }
             }
-        } catch (error) {
-            show_alert('Error en la solicitud', 'error');
-        }
-    };
+        };
+        
 
-    // Función para obtener los productos desde la API
-    const getProducts = async () => {
-        try {
-            setLoading(true);
-            const respuesta = await axios.get(url);
-            setProductos(respuesta.data);
-            setLoading(false);
-        } catch (err) {
-            setError(err);
-            setLoading(false);
-        }
-    };
 
-    // Función para mostrar alertas
-    const show_alert = (mensaje, tipo) => {
-        MySwal.fire({
-            title: tipo === 'success' ? 'Éxito' : 'Error',
-            text: mensaje,
-            icon: tipo,
-            confirmButtonText: 'OK'
-        });
-    };
+// Función para mostrar alertas
+const show_alert = (mensaje, tipo) => {
+    MySwal.fire({
+        title: tipo === 'Éxito' ? 'error' : 'Exito', // Corrección del operador ternario
+        text: mensaje,
+        icon: tipo.toLowerCase(), // Asegúrate de que el icono esté en minúsculas
+        confirmButtonText: 'OK'
+    });
+};
 
-    // Función para borrar productos
-    const borrarProducto = (id, producto) => {
+
+    // Función para eliminar productos
+    const borrarProducto = (id) => {
         MySwal.fire({
             title: '¿Estás seguro de eliminar este producto?',
             icon: 'question',
@@ -143,12 +162,20 @@ const ShowProducts = () => {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                enviarDatos({}, 'DELETE', id);
-            } else {
-                show_alert('El producto no fue eliminado', 'error');
+                axios.delete(`${url}/${id}`)
+                    .then(() => {
+                        // Actualiza los productos en el estado
+                        setProductos(productos.filter(producto => producto._id !== id));
+                        show_alert('Producto eliminado correctamente', 'success');
+                    })
+                    .catch(error => {
+                        console.error('Error deleting product:', error);
+                        show_alert('Hubo un error al eliminar el producto', 'error');
+                    });
             }
         });
     };
+    
 
     // Datos para la gráfica circular
     const pieData = {
