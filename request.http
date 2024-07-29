@@ -1,35 +1,33 @@
 ###
-POST http://127.0.0.1:9000/api/producto HTTP/1.1
+POST http://127.0.0.1:9000/api HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombre": "Laptop ",
-  "descripcion": "Laptop l i7",
-  "precio": 120,
-  "categoria": "Electrónica",
+  "producto": "mesa gamer ",
+  "descripcion": "rgb",
+  "precio": 100,
   "cantidadEnStock": 15
 } 
 
 
 ###
-GET http://127.0.0.1:9000/api/producto HTTP/1.1
+GET http://127.0.0.1:9000/api HTTP/1.1
 
 
 ###
-GET http://127.0.0.1:9000/api/producto/66a40026154b398e12da0bc9 HTTP/1.1
+GET http://127.0.0.1:9000/api/66a725e1c99d1c7f99431a31 HTTP/1.1
 
 
 ###
-PUT  http://127.0.0.1:9000/api/producto/666a6d96175fe8095fefdcd09 HTTP/1.1
+PUT  http://127.0.0.1:9000/api/66a725e1c99d1c7f99431a31 HTTP/1.1
 Content-Type: application/json
 
 {
-  "nombre": "pc gamer ",
+  "producto": "pc gamer ",
   "descripcion": "Laptop l i7",
   "precio": 10,
-  "categoria": "Electrónica",
   "cantidadEnStock": 10
 } 
 
 ###
-DELETE  http://127.0.0.1:9000/api/producto/66a40026154b398e12da0bc9 HTTP/1.1
+DELETE  http://127.0.0.1:9000/api/66a725e1c99d1c7f99431a31 HTTP/1.1

@@ -8,13 +8,13 @@ const app = express();
 const port = process.env.PORT || 9000;
 
 // Middleware
-app.use(cors()); // Habilita CORS
+app.use(cors()); // Usa el paquete cors
 app.use(express.json());
 app.use('/api', userRoutes);
 
 // Rutas
 app.get("/", (req, res) => {
-    res.send("Hello World ");
+    res.send("Hello World");
 });
 
 // Conectar a MongoDB
