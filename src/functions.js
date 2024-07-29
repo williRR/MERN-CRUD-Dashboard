@@ -8,7 +8,7 @@ import withreactContent from 'sweetalert2-react-content'
 
 
 // show_alert se usa para mostrar alertas en la paguina
-export function show_alert(mensaje,icono,foco){ {
+export function show_alert(mensaje,icono,foco=''){ {
     onfocus(foco );
     const MySwal = withreactContent(Swal)
     MySwal.fire({
