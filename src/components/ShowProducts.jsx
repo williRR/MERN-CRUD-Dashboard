@@ -18,60 +18,66 @@ const MySwal = withReactContent(Swal);
 
 const ShowProducts = () => {
     const url = 'http://127.0.0.1:9000/api';
-    const [productos, setProductos] = useState([]);
-    const [_id, setId] = useState('');
-    const [producto, setProducto] = useState('');
-    const [descripcion, setDescripcion] = useState('');
-    const [precio, setPrecio] = useState('');
-    const [cantidad, setCantidad] = useState('');
+    const [productos, setProductos] = useState([]);// Estado para almacenar los productos con un arrray vacio
+    const [_id, setId] = useState(''); // Estado para almacenar el ID del producto , para almcaenar el id del producto
+    const [producto, setProducto] = useState('');// Estado para almacenar el nombre del producto
+    const [descripcion, setDescripcion] = useState('');// Estado para almacenar la descripción del producto
+    const [precio, setPrecio] = useState('');// Estado para almacenar el precio del producto
+    const [cantidad, setCantidad] = useState('');// Estado para almacenar la cantidad del producto
     const [operation, setOperation] = useState(1); // 1 = agregar, 2 = editar
-    const [titulo, setTitulo] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [titulo, setTitulo] = useState('');// Estado para almacenar el titulo del modal
+    const [loading, setLoading] = useState(false);// Estado para almacenar el estado de carga
+    const [error, setError] = useState(null);// Estado para almacenar el error
 
-         // Función para obtener los productos desde la API
+    // Llama a la función getProducts para obtener los productos desde la API
+    useEffect(() => {
+        getProducts();
+    }, [])
+
+
+
+    // Función para obtener los productos desde la API
          const getProducts = async () => {
             try {
-                setLoading(true);
-                const respuesta = await axios.get(url);
+                // para intentar ejecutar el codigo que puede lanzar excepciones
+                setLoading(true); //indica que la operacion de carga esta en proceso
+                const respuesta = await axios.get(url);// realiza solicitud http 
                 setProductos(respuesta.data);
-                setLoading(false);
+                setLoading(false); // indica la operacion de carga ha finalizado
             } catch (err) {
-                setError(err);
-                setLoading(false);
+                setError(err); // captura el error
+                setLoading(false); // indica la operacion de carga ha finalizado , aunque sucedio un error 
             }
         };
    
-
-    useEffect(() => {
-        getProducts();
-    }, []);
+;
 
 
     // Determina la operación que se va a realizar
     const openModal = (op, _id, producto, descripcion, precio, cantidad) => {
-        setId(_id);
-        setProducto('');
-        setDescripcion('');
-        setPrecio('');
-        setCantidad('');
-        setOperation(op);
+        setId(_id); // establece el id del producto
+        setProducto(''); // establece el nombre del producto
+        setDescripcion(''); //  establece la descripcion del producto
+        setPrecio(''); //   establece el precio del producto
+        setCantidad(''); // establece la cantidad del producto
+        setOperation(op);// establece la operacion a realizar , 1 = agregar, 2 = editar
 
         if (op === 1) {
-            setTitulo('Agregar Producto');
+            setTitulo('Agregar Producto'); // establece el titulo del modal
         } else if (op === 2) {
             setTitulo('Editar Producto');
-            setId(_id);
+            setId(_id); // establece el id del producto
             setProducto(producto);
             setDescripcion(descripcion);
             setPrecio(precio);
             setCantidad(cantidad);
-            document.getElementById('id').value = _id;
+            document.getElementById('id').value = _id; 
         }
 
-        // Usando una función tradicional
+        // elemento DOM para enfocar un elemento después de 500 ms
+        // Usando una función tradicional  para enfocar un elemento después de 500 ms
         window.setTimeout(function () {
-            document.getElementById('nombre').focus();
+            document.getElementById('nombre').focus(); // Enfoca el elemento con el ID 'nombre' después de 500 ms
         }, 500);
     };
 
@@ -80,11 +86,17 @@ const ShowProducts = () => {
         // Función para enviar datos a la API
         const enviarDatos = async (parametros, metodo, id = '') => {
             try {
+                // contruye  la URL con el ID si se proporciona, de lo contrario usa la URL base
                 const urlConId = id ? `${url}/${id}` : url;
+                // realiza la solicitud http
                 const respuesta = await axios({ method: metodo, url: urlConId, data: parametros });
+                // muestra un mensaje de exito o error según la respuesta de la API
                 let tipo = respuesta.data.success ? 'success' : 'error';
                 let mensaje = respuesta.data.message;
+                // mostarmos el mensaje de exito o error
                 show_alert(mensaje, tipo);
+
+                // si la respuesta es exitosa, cierra el modal
                 if (tipo === 'success') {
                     document.getElementById('btnCerrar').click();
                     // Actualiza los productos en el estado
@@ -100,7 +112,8 @@ const ShowProducts = () => {
             let parametros;
             let metodo;
             let id = document.getElementById('id').value; // Obtén el ID del campo oculto
-        
+
+        // Valida los campos del formulario
             if (producto.trim() === '') {
                 show_alert('El campo producto es requerido', 'error');
             } else if (descripcion.trim() === '') {
@@ -116,6 +129,7 @@ const ShowProducts = () => {
                     precio: parseFloat(precio.toString().trim()), 
                     cantidadEnStock: parseInt(cantidad.toString().trim()) 
                 };
+                
         
                 if (operation === 1) {
                     metodo = 'POST';
@@ -140,10 +154,10 @@ const ShowProducts = () => {
         
 
 
-// Función para mostrar alertas
+// Función para mostrar alertas con SweetAlert2 usando la instancia MySwal
 const show_alert = (mensaje, tipo) => {
     MySwal.fire({
-        title: tipo === 'Éxito' ? 'error' : 'Exito', // Corrección del operador ternario
+        title: tipo === 'Éxito' ? 'Error' : 'Exito', // Corrección del operador ternario
         text: mensaje,
         icon: tipo.toLowerCase(), // Asegúrate de que el icono esté en minúsculas
         confirmButtonText: 'OK'
@@ -152,6 +166,7 @@ const show_alert = (mensaje, tipo) => {
 
 
     // Función para eliminar productos
+    //con SweetAlert2 usando la instancia MySwal
     const borrarProducto = (id) => {
         MySwal.fire({
             title: '¿Estás seguro de eliminar este producto?',
@@ -178,9 +193,12 @@ const show_alert = (mensaje, tipo) => {
     
 
 // Datos para la gráfica circular
+
+// Calcula el total de productos en stock
 const totalProductos = productos.reduce((total, producto) => total + producto.cantidadEnStock, 0);
 
 const pieData = {
+    // usamos map para iterar sobte el array de productos y obtener los datos necesarios
     labels: productos.map((producto) => producto.producto),
     datasets: [
         {
@@ -225,11 +243,14 @@ const pieData = {
                                     </tr>
                                 </thead>
                                 <tbody className='table-group-divider'>
+                                {/* Verifica si 'productos' es un array y, si es así, itera sobre cada elemento del array*/} 
                                     {Array.isArray(productos) && productos.map((producto, index) => (
+                                        // Aquí va el contenido que se renderiza para cada producto
                                         <tr key={producto._id}>
                                             <td>{index + 1}</td>
                                             <td>{producto.producto}</td>
                                             <td>{producto.descripcion}</td>
+                                            {/* Formatea el precio con la moneda GTQ */}
                                             <td>${new Intl.NumberFormat('es-GT').format(producto.precio)}</td>
                                             <td>{producto.cantidadEnStock}</td>
                                             <td>
@@ -257,6 +278,7 @@ const pieData = {
                     </div>
                 </div>
 
+
                 {/* Modal para agregar producto */}
                 <div className='modal fade' id='modalProducts' tabIndex='-1' aria-labelledby='modalProductsLabel' aria-hidden='true'>
                     <div className='modal-dialog'>
@@ -271,22 +293,26 @@ const pieData = {
                                     <span className='input-group-text'>
                                         <i className='fa-solid fa-gift'> Producto </i>
                                     </span>
+                                    {/* Input para el nombre del producto */}
                                     <input type='text' id='nombre' className='form-control' placeholder='Nombre' value={producto} onChange={(event) => setProducto(event.target.value)} />
                                 </div>
                                 <div className='input-group mb-3'>
                                     <span className='input-group-text'>
                                         <i className='fa-solid fa-comment'> Descripción </i>
                                     </span>
+                                    {/* Input para la descripción del producto */}
                                     <input type='text' id='descripcion' className='form-control' placeholder='Descripción' value={descripcion} onChange={(event) => setDescripcion(event.target.value)} />
                                 </div>
                                 <div className='input-group mb-3'>
                                     <span className='input-group-text'>
                                         <i className='fa-solid fa-dollar-sign'> Precio </i>
                                     </span>
+                                    {/* Input para el precio del producto */}
                                     <input type='text' id='precio' className='form-control' placeholder='Precio' value={precio} onChange={(event) => setPrecio(event.target.value)} />
                                 </div>
                                 <div className='input-group mb-3'>
                                     <span className='input-group-text'>
+                                        {/* Input para la cantidad del producto */}
                                         <i className='fa-solid fa-list-ol'> Cantidad </i>
                                     </span>
                                     <input type='number' id='cantidad' className='form-control' placeholder='Cantidad' value={cantidad} onChange={(event) => setCantidad(event.target.value)} />
@@ -294,6 +320,7 @@ const pieData = {
 
                             </div>
                             <div className='modal-footer'>
+                                {/* Botones para cerrar el modal y guardar los datos */}
                                 <button type='button' className='btn btn-secondary' data-bs-dismiss='modal' id='btnCerrar'>Cerrar</button>
                                 <button type='button' className='btn btn-dark' onClick={validateFields}>Guardar</button>
                             </div>
@@ -304,5 +331,5 @@ const pieData = {
         </div>
     );
 };
-
+// Exporta el componente ShowProducts
 export default ShowProducts;
